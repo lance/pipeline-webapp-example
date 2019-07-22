@@ -1,0 +1,5 @@
+
+# s2i build '.' nodeshift/centos7-s2i-web-app -a /opt/app-root/output --runtime-image centos/nginx-114-centos7 webapp-nginx-runtime
+
+set -o xtrace
+cp -R output/* /opt/app-root/src

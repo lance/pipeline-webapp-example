@@ -1,0 +1,61 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-webapp
+spec:
+  inputs:
+    resources:
+      - name: source-image
+        type: image
+    params:
+      - name: SOURCE_PATH
+        description: The location of the build output
+        default: build
+      - name: TLSVERIFY
+        description: Verify the TLS on the registry endpoint
+        default: "true"
+  outputs:
+    resources:
+      - name: runtime-image
+        type: image
+  steps:
+    - name: copy-source
+      image: ${inputs.resources.source-image.url}
+      workingdir: /opt/app-root/source
+      command: ['cp', '-Rp', '${inputs.params.SOURCE_PATH}', '/gen-source/']
+      volumeMounts:
+        - name: gen-source
+          mountPath: /gen-source
+      securityContext:
+        privileged: true
+    - name: generate
+      image: quay.io/openshift-pipeline/s2i
+      workingdir: /workspace/source
+      command: ['s2i', 'build', '/gen-source/${inputs.params.SOURCE_PATH}', 'nginx', '--as-dockerfile', '/gen-source/Dockerfile.gen']
+      volumeMounts:
+        - name: gen-source
+          mountPath: /gen-source
+    - name: build
+      image: quay.io/buildah/stable
+      workingdir: /gen-source
+      command: ['buildah', 'bud', '--tls-verify=${inputs.params.TLSVERIFY}', '--layers', '-f', '/gen-source/Dockerfile.gen', '-t', '${outputs.resources.runtime-image.url}', '.']
+      volumeMounts:
+        - name: varlibcontainers
+          mountPath: /var/lib/containers
+        - name: gen-source
+          mountPath: /gen-source
+      securityContext:
+        privileged: true
+    - name: push
+      image: quay.io/buildah/stable
+      command: ['buildah', 'push', '--tls-verify=${inputs.params.TLSVERIFY}', '${outputs.resources.runtime-image.url}', 'docker://${outputs.resources.runtime-image.url}']
+      volumeMounts:
+        - name: varlibcontainers
+          mountPath: /var/lib/containers
+      securityContext:
+        privileged: true
+  volumes:
+    - name: varlibcontainers
+      emptyDir: {}
+    - name: gen-source
+      emptyDir: {}
