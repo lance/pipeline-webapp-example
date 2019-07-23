@@ -6,7 +6,7 @@ spec:
   # Use service account with git and image repo credentials
   serviceAccount: pipeline
   taskRef:
-    name: image-registry.openshift-image-registry.svc:5000/deploy-webapp
+    name: deploy-webapp
   inputs:
     resources:
       - name: source-image
@@ -14,7 +14,7 @@ spec:
           type: image
           params:
             - name: url
-              value: example-webapp
+              value: image-registry.openshift-image-registry.svc:5000/example-webapp
   outputs:
     resources:
       - name: runtime-image
