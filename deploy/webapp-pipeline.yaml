@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: webapp-deployment-pipeline
+spec:
+  resources:
+  - name: build-image
+    type: image
+  - name: runtime-image
+    type: image
+
+  tasks:
+  - name: build-runtime
+    taskRef:
+      name: webapp-build-runtime
+    resources:
+      inputs:
+      - name: image
+        resource: build-image
+      outputs:
+      - name: image
+        resource: runtime-image
+  - name: deploy
+    taskRef: 
+      name: openshift-client
+    runAfter:
+      - build-runtime
+    params:
+    - name: ARGS
+      value: "rollout latest example-webapp-runtime"
+

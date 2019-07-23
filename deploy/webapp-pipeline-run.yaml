@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: webapp-deploy-pipelinerun
+  generateName: webapp-deploy-pipelinerun-
+spec:
+  pipelineRef:
+    name: webapp-deployment-pipeline
+  trigger:
+    type: manual
+  serviceAccount: 'pipeline'
+  resources:
+  - name: build-image
+    resourceRef:
+      name: webapp-build-image
+  - name: runtime-image
+    resourceRef:
+      name: webapp-runtime-image
