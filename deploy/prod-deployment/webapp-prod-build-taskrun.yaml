@@ -1,0 +1,32 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: webapp-prod-build-taskrun
+spec:
+  # Use service account with git and image repo credentials
+  serviceAccount: pipeline
+  taskRef:
+    name: s2i
+  inputs:
+    params:
+    - name: BUILDER_IMAGE
+      value: docker.io/nodeshift/centos7-s2i-web-app
+    - name: PATH_CONTEXT
+      value: src
+    - name: TLSVERIFY
+      value: "false"
+    resources:
+    - name: source
+      resourceSpec:
+        type: git
+        params:
+        - name: url
+          value: https://github.com/lance/pipeline-webapp-example
+  outputs:
+    resources:
+    - name: image
+      resourceSpec:
+        type: image
+        params:
+        - name: url
+          value: image-registry.openshift-image-registry.svc:5000/rht-day-nyc/webapp-prod

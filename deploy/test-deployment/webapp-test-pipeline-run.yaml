@@ -1,8 +1,7 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  name: webapp-deploy-pipelinerun
-  generateName: webapp-deploy-pipelinerun-
+  name: webapp-test-pipelinerun
 spec:
   pipelineRef:
     name: webapp-deployment-pipeline
@@ -12,7 +11,7 @@ spec:
   resources:
   - name: build-image
     resourceRef:
-      name: webapp-build-image
+      name: webapp-test-build
   - name: runtime-image
     resourceRef:
-      name: webapp-runtime-image
+      name: webapp-runtime-test-image
