@@ -1,35 +1,32 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: webapp-build-runtime
+  name: s2i
 spec:
   inputs:
     resources:
-    - name: image
-      type: image
+     - name: source
+       type: git
     params:
-    - name: SOURCE_PATH
-      description: The location of the webapp source
-      default: /opt/app-root/output
+    - name: BUILDER_IMAGE
+      description: The location of the s2i builder image.
+    - name: PATH_CONTEXT
+      description: The location of the path to run s2i from.
+      default: .
     - name: TLSVERIFY
       description: Verify the TLS on the registry endpoint (for push/pull to a non-TLS registry)
-      default: "false"
+      default: "true"
+
   outputs:
     resources:
     - name: image
       type: image
+
   steps:
-  - name: copy-source
-    image: ${inputs.resources.image.url}
-    workingdir: ${inputs.params.SOURCE_PATH}
-    command: ['cp', '-Rvp', '${inputs.params.SOURCE_PATH}', '/gen-source/build']
-    volumeMounts:
-    - name: gen-source
-      mountPath: /gen-source
   - name: generate
     image: quay.io/openshift-pipeline/s2i
     workingdir: /workspace/source
-    command: ['s2i', 'build', '/gen-source/build', 'nginx', '--as-dockerfile', '/gen-source/Dockerfile.gen']
+    command: ['s2i', 'build', '${inputs.params.PATH_CONTEXT}', '${inputs.params.BUILDER_IMAGE}', '--as-dockerfile', '/gen-source/Dockerfile.gen']
     volumeMounts:
     - name: gen-source
       mountPath: /gen-source
