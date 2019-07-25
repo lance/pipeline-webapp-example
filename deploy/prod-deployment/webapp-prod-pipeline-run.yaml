@@ -7,7 +7,7 @@ spec:
     name: webapp-deployment-pipeline
   trigger:
     type: manual
-  serviceAccount: 'pipeline'
+  serviceAccount: pipeline
   resources:
   - name: build-image
     resourceRef:

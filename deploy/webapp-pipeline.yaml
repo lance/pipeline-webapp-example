@@ -20,12 +20,12 @@ spec:
       outputs:
       - name: image
         resource: runtime-image
-  - name: deploy
-    taskRef: 
-      name: openshift-client
-    runAfter:
-      - build-runtime
-    params:
-    - name: ARGS
-      value: "rollout latest example-webapp-runtime"
+  # - name: deploy
+  #   taskRef: 
+  #     name: openshift-client
+  #   runAfter:
+  #     - build-runtime
+  #   params:
+  #   - name: ARGS
+  #     value: "rollout latest example-webapp-runtime"
 

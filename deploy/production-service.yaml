@@ -1,0 +1,20 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: production-webapp
+  namespace: nyc-webapp
+spec:
+  template:
+    metadata:
+      labels:
+        app: webapp
+        tier: frontend
+    spec:
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/nyc-webapp/webapp-runtime:prod
+          resources:
+            requests:
+              cpu: 50m
+              memory: 20Mi
+          ports:
+            - containerPort: 8080
