@@ -11,7 +11,7 @@ spec:
         tier: frontend
     spec:
       containers:
-        - image: image-registry.openshift-image-registry.svc:5000/nyc-webapp/webapp-runtime:prod
+        - image: image-registry.openshift-image-registry.svc:5000/msa-day-ny/webapp-runtime:prod
           resources:
             requests:
               cpu: 50m

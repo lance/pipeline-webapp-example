@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1alpha1
 kind: TaskRun
 metadata:
   name: webapp-prod-build-taskrun
+  generateName: webapp-prod-build-taskrun-
 spec:
   # Use service account with git and image repo credentials
   serviceAccount: pipeline

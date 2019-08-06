@@ -20,7 +20,7 @@ spec:
       outputs:
       - name: image
         resource: runtime-image
-  # - name: deploy
+  # - name: deploy-runtime
   #   taskRef: 
   #     name: openshift-client
   #   runAfter:

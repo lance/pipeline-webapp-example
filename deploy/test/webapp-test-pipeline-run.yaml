@@ -2,6 +2,7 @@ apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
   name: webapp-test-pipelinerun
+  generateName: webapp-test-pipelinerun-
 spec:
   pipelineRef:
     name: webapp-deployment-pipeline

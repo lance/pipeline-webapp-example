@@ -6,4 +6,4 @@ spec:
   type: image
   params:
   - name: url
-    value: image-registry.openshift-image-registry.svc:5000/nyc-webapp/webapp-runtime:test
+    value: image-registry.openshift-image-registry.svc:5000/msa-day-ny/webapp-runtime:test

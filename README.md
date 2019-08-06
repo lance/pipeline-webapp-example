@@ -33,6 +33,8 @@ you are logged into an openshift instance with admin privileges and execute the
 `setup-service-account.sh` script. Now you are ready to install and configure the
 Kubernetes objects that comprise the `Pipeline` and `Service`.
 
+* Create the service account and grant it privileges
+    * `./setup-service-account.sh`
 * Install the pipeline
     * `oc apply -f deploy/webapp-pipeline.yaml`
 * Install the tasks
@@ -40,11 +42,11 @@ Kubernetes objects that comprise the `Pipeline` and `Service`.
     * `oc apply -f deploy/task/openshift-client-task.yaml`
     * `oc apply -f deploy/task/webapp-build-runtime-task.yaml`
 * Install the test deployment `Resource`s
-    * `oc apply -f deploy/test-deployment/webapp-test-build-resource.yaml`
-    * `oc apply -f deploy/test-deployment/webapp-test-runtime-resource.yaml`
+    * `oc apply -f deploy/test/webapp-test-build-resource.yaml`
+    * `oc apply -f deploy/test/webapp-test-runtime-resource.yaml`
 * Install the production deployment `Resource`s
-    * `oc apply -f deploy/prod-deployment/webapp-prod-build-resource.yaml`
-    * `oc apply -f deploy/prod-deployment/webapp-prod-runtime-resource.yaml`
+    * `oc apply -f deploy/production/webapp-prod-build-resource.yaml`
+    * `oc apply -f deploy/production/webapp-prod-runtime-resource.yaml`
 
 ## Running the Pipeline Build
 
@@ -65,7 +67,7 @@ Once the build image has been created, you can run the pipeline to generate
 the nginx runtime image.
 
 ```sh
-oc apply -f deploy/test-deployment/webapp-test-pipeline-run.yaml
+oc apply -f deploy/test/webapp-test-pipeline-run.yaml
 ```
 
 ### Production Deployment
@@ -76,7 +78,7 @@ the committed source in the GitHub repository, and run an `s2i` build on it use
 the `s2i` `Task` we installed earlier. To do this, apply the `TaskRun` script.
 
 ```sh
-oc apply -f deploy/prod-deployment/webapp-prod-build-taskrun.yaml
+oc apply -f deploy/production/webapp-prod-build-taskrun.yaml
 ```
 
 This will create an image containing the static files that will be copied to a
@@ -84,7 +86,7 @@ new nginx image for runtime. To create the runtime image, execute the production
 pipeline by applying the `PipelineRun` object.
 
 ```sh
-oc apply -f deploy/prod-deployment/webapp-prod-pipeline-run.yaml
+oc apply -f deploy/production/webapp-prod-pipeline-run.yaml
 ```
 
 ## Starting the Knative Service
@@ -94,5 +96,5 @@ and ensures there are sufficient replicas of the running container. To deploy
 the `Service` run the following.
 
 ```sh
-oc apply -f deploy/production-service.yaml
+oc apply -f deploy/production/production-service.yaml
 ```
