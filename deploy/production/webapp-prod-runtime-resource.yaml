@@ -1,9 +1,9 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: webapp-runtime-prod-image
+  name: webapp-prod-image
 spec:
   type: image
   params:
   - name: url
-    value: image-registry.openshift-image-registry.svc:5000/msa-day-ny/webapp-runtime:prod
+    value: image-registry.openshift-image-registry.svc:5000/msa-day-ny/webapp-runtime

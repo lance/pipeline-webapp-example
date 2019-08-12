@@ -12,7 +12,7 @@ spec:
   resources:
   - name: build-image
     resourceRef:
-      name: webapp-prod-image
+      name: webapp-build-image
   - name: runtime-image
     resourceRef:
-      name: webapp-runtime-prod-image
+      name: webapp-prod-image
