@@ -30,6 +30,8 @@ spec:
     volumeMounts:
     - name: gen-source
       mountPath: /gen-source
+    securityContext: 
+      privileged: true
   - name: build
     image: quay.io/buildah/stable
     workingdir: /gen-source
